@@ -1,6 +1,6 @@
 # AI Agents: Testing OpenAI Tools
 
-A simple agent testing a bunch of OpenAI conforming tools.
+First try at simple agent testing a bunch of OpenAI conforming tools.
 
 ## Deployed solution
 
