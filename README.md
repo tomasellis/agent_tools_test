@@ -58,7 +58,7 @@ At http://127.0.0.1:8000.
   - Was going to make a VITE web app but decided to scrap it and just work in the backend, using Langserve's Playground as UI. It's good enough for this.
   - There's no error handling, it would be needed in a prod environment, but here is just me playing around. No need for that right now.
 - It's a chat, the message history is held in client. And is used by the agent too.
-- The Agent can combine any of the tools togheter, as seen in the first picture. Mindblowing to be honest.
+- The Agent can combine any of the tools together, as seen in the first picture. Mindblowing to be honest.
 
 ## On the Agent proper
 
