@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "agent-tools-test"
+version = "0.1.0"
+description = ""
+authors = ["Tomas Ellis <tomas.sydney.ellis@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+langchain = "^0.1.4"
+langchain-core = "^0.1.16"
+langchain-openai = "^0.0.5"
+faiss-cpu = "^1.7.4"
+beautifulsoup4 = "^4.12.3"
+langchainhub = "^0.1.14"
+langserve = {extras = ["all"], version = "^0.0.39"}
+fastapi = "^0.109.0"
+python-dotenv = "^1.0.1"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.29.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

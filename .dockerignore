@@ -1,0 +1,8 @@
+# Ignore everything
+*
+
+# Allow files and directories
+!/app.py
+!/poetry.lock
+!/pyproject.toml
+!/Procfile
