@@ -49,7 +49,7 @@ retriever_tool = create_retriever_tool(
     "tomas_info",
     "Search for information about Tomas. For any questions about Tomas, you must use this tool!",
 )
-search = TavilySearchResults()
+#search = TavilySearchResults()
 
 @tool
 async def weather(city: str) -> any:
