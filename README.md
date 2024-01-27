@@ -181,3 +181,4 @@ It's mindblowing what they have achieved. The agent chooses the tools on its own
 
 - I have to handle error's still. Won't be doing it, but it's something to keep in mind.
 - The biggest issue I had was with Pydantic, which just tells you that it's working properly. As I coulnd't exactly get the hang of whatever Langchain's classes were asking for. That's why there's a messager parsing function, to keep everything in line with what the LLM expects.
+- Langchain's abstraction layer is amazing, you can just connect stuff and it works. I liked debugging looking at the agent's actions in the playground, and the playground is a great tool for developing.
