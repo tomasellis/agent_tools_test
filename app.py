@@ -115,6 +115,8 @@ def _format_to_messages(input: ChatHistory) -> List[BaseMessage]:
     history = input.chat_history
     user_input = input.question
     messages = history
+    print("history", history)
+    print("question", user_input)
     messages.append(HumanMessage(content=user_input))
     return {"chat_history":messages, "input": user_input}
 
@@ -147,4 +149,4 @@ def root(request: Request):
     """
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="localhost", port=8080)
+    uvicorn.run(app, host="localhost", port=8000)

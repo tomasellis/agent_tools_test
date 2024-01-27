@@ -4,6 +4,8 @@ First try at simple agent testing a bunch of OpenAI conforming tools.
 
 ## Deployed solution
 
+If it stops responding, try refreshing the page. Handling issues.
+
 [Playground demo, hosted on Fly.io](https://agent-functions-test.fly.dev/agent/playground/)
 
 ![Question](image.png)
