@@ -34,7 +34,6 @@ import os
 
 WEATHER_API_KEY = os.environ['WEATHER_API_KEY']
 
-# 1. Load Retriever
 loader = WebBaseLoader(["https://tomasellis.dev/about", "https://tomasellis.dev/projects"])
 docs = loader.load()
 text_splitter = RecursiveCharacterTextSplitter()
@@ -43,13 +42,11 @@ embeddings = OpenAIEmbeddings()
 vector = FAISS.from_documents(documents, embeddings)
 retriever = vector.as_retriever()
 
-# 2. Create Tools
 retriever_tool = create_retriever_tool(
     retriever,
     "tomas_info",
     "Search for information about Tomas. For any questions about Tomas, you must use this tool!",
 )
-#search = TavilySearchResults()
 
 @tool
 async def weather(city: str) -> any:
@@ -57,8 +54,6 @@ async def weather(city: str) -> any:
     url = f"http://api.weatherapi.com/v1/forecast.json?key={WEATHER_API_KEY}&q={city}&days=1&aqi=no&alerts=no"
     response = requests.post(url)
     data = response.json()
-
-    print(data["location"])
 
     return f"""{data["location"]["name"]} in {data["location"]["country"]}
     currently has a temperature of {data["current"]["temp_c"]} Celcius or {data["current"]["temp_f"]} Fahrenheit,
