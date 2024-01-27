@@ -49,20 +49,27 @@ retriever_tool = create_retriever_tool(
 )
 
 @tool
-async def weather(city: str) -> any:
+def weather(city: str) -> any:
     """Get weather for a city"""
-    url = f"http://api.weatherapi.com/v1/forecast.json?key={WEATHER_API_KEY}&q={city}&days=1&aqi=no&alerts=no"
-    response = requests.post(url)
-    data = response.json()
+    
+    try:
+        url = f"http://api.weatherapi.com/v1/forecast.json?key={WEATHER_API_KEY}&q={city}&days=1&aqi=no&alerts=no"
+        response = requests.post(url)
+        data = response.json()
 
-    return f"""{data["location"]["name"]} in {data["location"]["country"]}
-    currently has a temperature of {data["current"]["temp_c"]} Celcius or {data["current"]["temp_f"]} Fahrenheit,
-    with a max of {data["forecast"]["forecastday"][0]["day"]["maxtemp_c"]} C° / {data["forecast"]["forecastday"][0]["day"]["maxtemp_f"]}
-    F° and min of {data["forecast"]["forecastday"][0]["day"]["mintemp_c"]} C° / {data["forecast"]["forecastday"][0]["day"]["mintemp_f"]} F°.
-    It feels like {data["current"]["feelslike_c"]} Celcius or {data["current"]["feelslike_f"]} Fahrenheit.
-    It is {data["current"]["condition"]["text"]} outside. Wind is moving at {data["current"]["wind_mph"]} Mph or {data["current"]["wind_kph"]} Km/h.
-    """
-
+        return f"""{data["location"]["name"]} in {data["location"]["country"]}
+        currently has a temperature of {data["current"]["temp_c"]} Celcius or {data["current"]["temp_f"]} Fahrenheit,
+        with a max of {data["forecast"]["forecastday"][0]["day"]["maxtemp_c"]} C° / {data["forecast"]["forecastday"][0]["day"]["maxtemp_f"]}
+        F° and min of {data["forecast"]["forecastday"][0]["day"]["mintemp_c"]} C° / {data["forecast"]["forecastday"][0]["day"]["mintemp_f"]} F°.
+        It feels like {data["current"]["feelslike_c"]} Celcius or {data["current"]["feelslike_f"]} Fahrenheit.
+        It is {data["current"]["condition"]["text"]} outside. Wind is moving at {data["current"]["wind_mph"]} Mph or {data["current"]["wind_kph"]} Km/h.
+        """
+    except requests.exceptions.HTTPError as err:
+        print(f"HTTP Error in Weather, code: {err.response.status_code}. Error: {err.response.text}")
+        return(err.response.text)
+    except Exception as e:
+        print(f"Unexpected error in WEATHER with {city} param: {str(e)}")
+        return f"Unexpected error in WEATHER with {city} param: {str(e)}"
 @tool
 def sum(int1: int, int2:int) -> int:
     """Sums two numbers and returns a number"""
@@ -72,21 +79,29 @@ def sum(int1: int, int2:int) -> int:
 @tool
 async def draw(image_desc: str) -> any:
     """Draws an image from a prompt and returns the image url"""
-    from langchain.prompts import PromptTemplate
-    from langchain_community.utilities.dalle_image_generator import DallEAPIWrapper
-    from langchain_openai import OpenAI
+
+    try:
+        from langchain.prompts import PromptTemplate
+        from langchain_community.utilities.dalle_image_generator import DallEAPIWrapper
+        from langchain_openai import OpenAI
+        
+        llm = OpenAI(temperature=0.9)
+        prompt = PromptTemplate(
+            input_variables=["image_desc"],
+            template="Generate a simple prompt of less than 1000 characters to generate an image based on the following description: {image_desc}, cartoon, joyful, sky, high quality, focused on sky",
+        )
+
+        chain = LLMChain(llm=llm, prompt=prompt)
+        image_url = DallEAPIWrapper().run(chain.run(image_desc))
+        return f"Here's the image url: {image_url} pass it fully to the user, don't cut it, leave the query params intact. Just pass the whole thing forward."
     
-
-    llm = OpenAI(temperature=0.9)
-    prompt = PromptTemplate(
-        input_variables=["image_desc"],
-        template="Generate a simple prompt of less than 1000 characters to generate an image based on the following description: {image_desc}, cartoon, joyful, sky, high quality, focused on sky",
-    )
-
-    chain = LLMChain(llm=llm, prompt=prompt)
-    image_url = DallEAPIWrapper().run(chain.run(image_desc))
-    return f"Here's the image url: {image_url} pass it fully to the user, don't cut it, leave the query params intact. Just pass the whole thing forward."
-
+    except requests.exceptions.HTTPError as err:
+        print(f"HTTP Error in DRAW, code: {err.response.status_code}. Error: {err.response.text}")
+        return(err.response.text)
+    except Exception as e:
+        print(f"Unexpected error in DRAW with {image_desc} param: {str(e)}")
+        return f"Unexpected error in DRAW with {image_desc} param: {str(e)}"
+    
 tools = [retriever_tool, weather, sum, draw]
 
 #Proper agent
@@ -117,7 +132,7 @@ def _format_to_messages(input: ChatHistory) -> List[BaseMessage]:
     messages = history
     print("history", history)
     print("question", user_input)
-    messages.append(HumanMessage(content=user_input))
+    #messages.append(HumanMessage(content=user_input))
     return {"chat_history":messages, "input": user_input}
 
 def parse_actions(agent_actions: any):
@@ -132,7 +147,6 @@ add_routes(
     app,
     chat_model.with_types(input_type=ChatHistory, output_type=Response),
     config_keys=["configurable"],
-    path="/agent",
 )
 
 @app.get("/", response_class=HTMLResponse)
@@ -143,10 +157,10 @@ def root(request: Request):
             <title>Agent Testing</title>
         </head>
         <body>
-            <a href="{str(request.url)}agent/playground">Go here for testing!</a>
+            <a href="{str(request.url)}playground">Go here for testing!</a>
         </body>
     </html>
     """
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="localhost", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000)

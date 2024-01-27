@@ -8,7 +8,8 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "dev:python": "poetry install && poetry run uvicorn app:app --reload --env-file .env --log-level debug"
+    "dev:python": "poetry install && poetry run uvicorn app:app --reload --env-file .env --log-level debug",
+    "dev:python2": "poetry install && poetry run uvicorn app2:app --reload --env-file .env --log-level debug"
   },
   "dependencies": {
     "react": "^18.2.0",
