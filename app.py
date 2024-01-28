@@ -28,6 +28,7 @@ from langchain.schema.output_parser import StrOutputParser
 from langchain.schema.runnable import RunnableLambda, RunnableParallel
 from langserve.schema import CustomUserType
 from langchain.chains import LLMChain
+from fastapi.responses import RedirectResponse
 
 #ENV
 import os
@@ -147,6 +148,7 @@ add_routes(
     app,
     chat_model.with_types(input_type=ChatHistory, output_type=Response),
     config_keys=["configurable"],
+    path="/agent"
 )
 
 @app.get("/", response_class=HTMLResponse)
@@ -157,7 +159,20 @@ def root(request: Request):
             <title>Agent Testing</title>
         </head>
         <body>
-            <a href="{str(request.url)}playground">Go here for testing!</a>
+            <a href="{str(request.url)}agent/playground">Go here for testing!</a>
+        </body>
+    </html>
+    """
+
+@app.get("/agent", response_class=HTMLResponse)
+def root(request: Request):
+    return f"""
+    <html>
+        <head>
+            <title>Agent Testing</title>
+        </head>
+        <body>
+            <a href="{str(request.url)}/playground">Go here for testing!</a>
         </body>
     </html>
     """

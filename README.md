@@ -52,13 +52,14 @@ PNPM
 
 This will use Poetry to install python dependencies, and run the server using FastAPI and Uvicorn.
 
-At http://127.0.0.1:8000.
+At http://127.0.0.1:8000/agent/playground.
 
 ## Stack and stuff
 
 - Used Python, [Langchain, Langserve](https://python.langchain.com/docs/get_started/introduction), [FastAPI with Uvicorn](https://fastapi.tiangolo.com/), [OpenAI's API](https://platform.openai.com/api-keys) and [WeatherAPI's API](https://www.weatherapi.com/).
   - Was going to make a VITE web app but decided to scrap it and just work in the backend, using Langserve's Playground as UI. It's good enough for this.
-  - There's no error handling, it would be needed in a prod environment, but here is just me playing around. No need for that right now.
+  - ~~There's no error handling, it would be needed in a prod environment, but here is just me playing around. No need for that right now.~~
+  - The team(me, i'm the team) had to handle errors, sometimes the agent would just not respond when using the external API tools like the Weather tool. The issue was a 400 response from the API that wasn't handled. So now we are proud error handlers. 🗿
 - It's a chat, the message history is held in client. And is used by the agent too.
 - The Agent can combine any of the tools together, as seen in the first picture. Mindblowing to be honest.
 
@@ -181,6 +182,7 @@ Here's the cursed bird.
 
 It's mindblowing what they have achieved. The agent chooses the tools on its own. And you can make as many as you want.
 
-- I have to handle error's still. Won't be doing it, but it's something to keep in mind.
-- The biggest issue I had was with Pydantic, which just tells you that it's working properly. As I coulnd't exactly get the hang of whatever Langchain's classes were asking for. That's why there's a messager parsing function, to keep everything in line with what the LLM expects.
+- ~~I have to handle error's still. Won't be doing it, but it's something to keep in mind.~~
+- _Narrator: he did do it._
+- The biggest issue I had was with Pydantic, which just tells you that it's working properly. As I coulnd't exactly get the hang of what Langchain was asking for. That's why there's a messager parsing function, to keep everything in line with what Langchain expects.
 - Langchain's abstraction layer is amazing, you can just connect stuff and it works. I liked debugging looking at the agent's actions in the playground, and the playground is a great tool for developing.
