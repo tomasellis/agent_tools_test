@@ -55,7 +55,8 @@ def weather(city: str) -> any:
     
     try:
         url = f"http://api.weatherapi.com/v1/forecast.json?key={WEATHER_API_KEY}&q={city}&days=1&aqi=no&alerts=no"
-        response = requests.post(url)
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
         data = response.json()
 
         return f"""{data["location"]["name"]} in {data["location"]["country"]}
